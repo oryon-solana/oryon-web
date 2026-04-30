@@ -1,44 +1,50 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { ThemeToggle } from "@/components/theme-toggle";
 
 const links = ["Swap", "Rewards", "Ecosystem", "Developers", "Docs"];
 
-const Navbar = () => {
-  return (
-    <header className="fixed top-0 left-0 right-0 z-50">
-      <div className="mx-auto max-w-7xl px-6 py-4">
-        <nav className="glass rounded-full flex items-center justify-between px-6 py-3">
-          <a href="#" className="flex items-center gap-2">
-            <Image
-              src="/logo-color.webp"
-              alt="Oryon"
-              width={120}
-              height={32}
-              className="h-8 w-auto object-contain"
-              priority
-            />
+const Navbar = () => (
+  <header className="fixed inset-x-0 top-0 z-50 flex h-[60px] items-center justify-between px-12 bg-[#080b10]/85 backdrop-blur-md border-b border-[#1e2a3a]">
+    <a href="#" className="flex items-center gap-2.5 shrink-0">
+      <Image
+        src="/logo-color.svg"
+        alt="Oryon"
+        width={100}
+        height={28}
+        className="h-7 w-auto"
+        priority
+      />
+    </a>
+
+    <ul className="hidden md:flex items-center gap-8 list-none">
+      {links.map((l) => (
+        <li key={l}>
+          <a
+            href="#"
+            className="text-[13.5px] font-medium text-[#7a90a8] hover:text-[#e8f0f8] transition-colors tracking-wide"
+          >
+            {l}
           </a>
-          <ul className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
-            {links.map((l) => (
-              <li key={l}>
-                <a href="#" className="hover:text-foreground transition-colors">{l}</a>
-              </li>
-            ))}
-          </ul>
-          <div className="flex items-center gap-2">
-            <ThemeToggle />
-            <Button variant="ghost" size="sm" className="hidden sm:inline-flex text-muted-foreground hover:text-foreground">
-              Sign in
-            </Button>
-            <Button size="sm" className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90 shadow-glow-soft font-medium">
-              Launch App
-            </Button>
-          </div>
-        </nav>
-      </div>
-    </header>
-  );
-};
+        </li>
+      ))}
+    </ul>
+
+    <div className="flex items-center gap-3">
+      <Button
+        variant="ghost"
+        size="sm"
+        className="text-[13.5px] text-[#7a90a8] hover:text-[#e8f0f8] hover:bg-transparent"
+      >
+        Sign In
+      </Button>
+      <Button
+        size="sm"
+        className="bg-primary hover:bg-primary/90 text-white text-[13px] font-semibold px-5 rounded-md tracking-wide transition-all hover:shadow-[0_0_20px_oklch(0.60_0.22_250_/_0.3)]"
+      >
+        Launch App →
+      </Button>
+    </div>
+  </header>
+);
 
 export default Navbar;

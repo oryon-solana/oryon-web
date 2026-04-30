@@ -3,7 +3,8 @@
     "allow": [
       "Bash(bun add *)",
       "Bash(bun run *)",
-      "Bash(curl -s http://localhost:3000)"
+      "Bash(curl -s http://localhost:3000)",
+      "Bash(npx next *)"
     ]
   }
 }

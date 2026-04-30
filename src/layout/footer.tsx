@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 const cols = [
   { title: "Protocol", links: ["Swap", "Stake", "Bridge", "Analytics"] },
   { title: "Build", links: ["Docs", "SDK", "API", "Grants"] },
@@ -6,33 +8,51 @@ const cols = [
 ];
 
 const Footer = () => (
-  <footer className="relative border-t border-border/50 pt-20 pb-10">
-    <div className="mx-auto max-w-7xl px-6">
-      <div className="grid md:grid-cols-[1.5fr_repeat(4,1fr)] gap-10 mb-16">
-        <div>
-          <div className="flex items-center gap-2 mb-4">
-            <div className="h-7 w-7 rounded-full bg-gradient-primary" />
-            <span className="text-lg font-semibold">Oryon</span>
-          </div>
-          <p className="text-sm text-muted-foreground max-w-xs">
-            The capital market for loyalty. Built on a high-performance network.
-          </p>
-        </div>
+  <footer className="border-t border-[#1e2a3a] pt-16 pb-10 px-20">
+    <div className="grid md:grid-cols-[240px_1fr] gap-20 mb-14">
+      <div>
+        <Image
+          src="/logo-color.svg"
+          alt="Oryon"
+          width={100}
+          height={28}
+          className="h-7 w-auto mb-4"
+        />
+        <p className="text-[13px] leading-relaxed text-[#5a7090] max-w-[220px]">
+          The capital market for loyalty. Built on a high-performance network.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
         {cols.map((c) => (
           <div key={c.title}>
-            <h4 className="text-xs font-mono uppercase tracking-widest text-foreground mb-4">{c.title}</h4>
-            <ul className="space-y-2.5 text-sm text-muted-foreground">
+            <h5 className="font-[family-name:var(--font-mono)] text-[11px] font-bold text-[#5a7090] uppercase tracking-[0.12em] mb-4">
+              {c.title}
+            </h5>
+            <ul className="flex flex-col gap-2.5">
               {c.links.map((l) => (
-                <li key={l}><a href="#" className="hover:text-foreground transition-colors">{l}</a></li>
+                <li key={l}>
+                  <a
+                    href="#"
+                    className="text-[13.5px] text-[#5a7090] hover:text-[#e8f0f8] transition-colors"
+                  >
+                    {l}
+                  </a>
+                </li>
               ))}
             </ul>
           </div>
         ))}
       </div>
-      <div className="flex flex-wrap items-center justify-between gap-4 text-xs text-muted-foreground font-mono pt-8 border-t border-border/50">
-        <span>© 2026 Oryon Labs. All rights reserved.</span>
-        <span>v2.1.0 · mainnet-beta</span>
-      </div>
+    </div>
+
+    <div className="flex flex-wrap items-center justify-between gap-4 pt-8 border-t border-[#1e2a3a]">
+      <p className="text-[12px] text-[#2a3a50] font-[family-name:var(--font-mono)]">
+        © 2026 Oryon Labs. All rights reserved.
+      </p>
+      <span className="text-[11px] text-[#2a3a50] font-[family-name:var(--font-mono)] tracking-wide">
+        v2.1.0 · mainnet-beta
+      </span>
     </div>
   </footer>
 );

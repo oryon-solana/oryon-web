@@ -1,28 +1,38 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
 
 const CTA = () => (
-  <section className="relative py-32">
-    <div className="mx-auto max-w-7xl px-6">
-      <div className="relative glass-strong rounded-[2rem] p-12 md:p-20 overflow-hidden text-center">
-        <div className="absolute inset-0 bg-gradient-glow opacity-80" />
-        <div className="absolute inset-0 grid-bg opacity-40" />
-        <div className="relative">
-          <h2 className="text-4xl md:text-6xl font-light tracking-tight text-gradient leading-tight max-w-3xl mx-auto">
-            Your points deserve a network.
-          </h2>
-          <p className="mt-5 text-muted-foreground max-w-xl mx-auto">
-            Join 4.1M wallets already swapping, staking and unlocking liquidity on Oryon.
-          </p>
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-            <Button size="lg" className="h-12 px-8 rounded-full bg-gradient-primary text-primary-foreground font-semibold shadow-glow">
-              Launch App <ArrowRight className="ml-1 h-4 w-4" />
-            </Button>
-            <Button size="lg" variant="ghost" className="h-12 px-8 rounded-full border border-border/80">
-              Talk to sales
-            </Button>
-          </div>
-        </div>
+  <section className="py-[120px] px-20 relative overflow-hidden bg-[#080b10]">
+    {/* Blue radial glow behind card */}
+    <div
+      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] pointer-events-none"
+      style={{
+        background:
+          "radial-gradient(ellipse, oklch(0.60 0.22 250 / 0.1) 0%, transparent 70%)",
+      }}
+    />
+
+    <div className="relative z-[1] max-w-[600px] mx-auto bg-[#0d1117] border border-[#1e2a3a] rounded-[20px] px-14 py-[72px] text-center">
+      <h2 className="text-[clamp(32px,3.5vw,50px)] font-bold leading-[1.1] tracking-tight text-[#e8f0f8] mb-4">
+        Your points deserve
+        <br />a{" "}
+        <span style={{ color: "oklch(0.70 0.20 250)" }}>network.</span>
+      </h2>
+      <p className="text-[15px] text-[#5a7090] mb-9 leading-relaxed">
+        Join 4.1M wallets already swapping, staking and unlocking liquidity on
+        Oryon.
+      </p>
+      <div className="flex flex-wrap items-center justify-center gap-3">
+        <Button
+          className="h-auto px-[26px] py-[13px] rounded-lg text-sm font-semibold tracking-wide bg-primary text-white hover:bg-primary/90 transition-all hover:shadow-[0_0_32px_oklch(0.60_0.22_250_/_0.3)] hover:-translate-y-px"
+        >
+          Launch App →
+        </Button>
+        <Button
+          variant="outline"
+          className="h-auto px-[26px] py-[13px] rounded-lg text-sm bg-transparent border-[#1e2a3a] text-[#a0b4c8] hover:text-[#e8f0f8] hover:border-[#2a3a50] hover:bg-transparent transition-colors"
+        >
+          Talk to sales
+        </Button>
       </div>
     </div>
   </section>

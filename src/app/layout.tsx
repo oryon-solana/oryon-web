@@ -1,11 +1,18 @@
 import type { Metadata } from "next";
-import { Inter, DM_Sans } from "next/font/google";
+import { Space_Grotesk, Space_Mono } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import { ThemeProvider } from "@/components/theme-provider";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-heading" });
-const dmSans = DM_Sans({ subsets: ["latin"], variable: "--font-sans" });
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
+
+const spaceMono = Space_Mono({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-mono",
+});
 
 export const metadata: Metadata = {
   title: "Oryon — The Loyalty Layer for Web3",
@@ -15,24 +22,23 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
       lang="en"
-      className={cn("h-full dark", "antialiased", inter.variable, dmSans.variable)}
+      className={cn("dark", spaceGrotesk.variable, spaceMono.variable)}
+      style={{ fontFamily: "var(--font-sans, 'Space Grotesk', sans-serif)" }}
     >
-      <head>
-        {/* Prevent flash of unstyled theme */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){var t=localStorage.getItem('theme')||'dark';document.documentElement.classList.toggle('dark',t==='dark');})();`,
+      <body className="min-h-screen flex flex-col font-[family-name:var(--font-sans)]">
+        {/* Scan-line ambient effect */}
+        <div
+          className="fixed inset-x-0 top-0 h-0.5 pointer-events-none z-[999] animate-scanline"
+          style={{
+            background:
+              "linear-gradient(to right, transparent, oklch(0.60 0.22 250 / 0.15), transparent)",
           }}
         />
-      </head>
-      <body className="min-h-full flex flex-col">
-        <ThemeProvider>{children}</ThemeProvider>
+        {children}
       </body>
     </html>
   );
