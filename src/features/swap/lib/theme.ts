@@ -1,0 +1,25 @@
+export const T = {
+  n950: "#080b10",
+  n900: "#0d1117",
+  n850: "#111720",
+  n800: "#161e2a",
+  n700: "#1e2a3a",
+  n600: "#2a3a50",
+  n400: "#5a7090",
+  n300: "#7a90a8",
+  n200: "#a0b4c8",
+  n100: "#c8d8e8",
+  white: "#e8f0f8",
+  blue: "oklch(60% 0.22 250)",
+  blue4: "oklch(70% 0.20 250)",
+  blue3: "oklch(78% 0.17 250)",
+  blueDim: "oklch(60% 0.22 250 / 0.12)",
+  blueBorder: "oklch(60% 0.22 250 / 0.25)",
+  blueGlow: "oklch(60% 0.22 250 / 0.3)",
+  green: "oklch(65% 0.18 155)",
+  greenDim: "oklch(65% 0.18 155 / 0.15)",
+  red: "oklch(60% 0.22 25)",
+  redDim: "oklch(60% 0.22 25 / 0.12)",
+} as const;
+
+export const FEE = 0.015;

@@ -1,11 +1,6 @@
 import { Fragment } from "react";
 import { Button } from "@/components/ui/button";
-
-const stats = [
-  { v: "$1.2B", l: "On-chain Supply" },
-  { v: "240+", l: "Loyalty Programs" },
-  { v: "4.1M", l: "Active Wallets" },
-];
+import { STATS } from "../lib/data";
 
 const Hero = () => (
   <section className="relative min-h-screen flex flex-col justify-center px-20 pt-[120px] pb-20 overflow-hidden bg-[#080b10]">
@@ -90,7 +85,7 @@ const Hero = () => (
 
     {/* Stats */}
     <div className="relative z-[2] flex items-center gap-12 mt-16">
-      {stats.map((s, i) => (
+      {STATS.map((s, i) => (
         <Fragment key={s.l}>
           {i > 0 && <div className="w-px h-10 bg-[#1e2a3a]" />}
           <div className="flex flex-col gap-1">

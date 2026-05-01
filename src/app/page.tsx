@@ -1,21 +1,26 @@
-import Navbar from "@/components/shared/layout/Navbar";
-import Footer from "@/components/shared/layout/Footer";
-import Hero from "@/sections/landing/Hero";
-import Partnership from "@/sections/landing/Partnership";
-import Features from "@/sections/landing/Features";
-import Manual from "@/sections/landing/Manual";
-import CTA from "@/sections/landing/CTA";
+import type { Metadata } from "next";
+import Navbar from "@/components/shared/Navbar";
+import Footer from "@/components/shared/Footer";
+import Hero from "@/features/landing/sections/Hero";
+import Partnership from "@/features/landing/sections/Partnership";
+import Features from "@/features/landing/sections/Features";
+import Manual from "@/features/landing/sections/Manual";
+import CTA from "@/features/landing/sections/CTA";
+
+export const metadata: Metadata = {
+  title: "CRYON — The Loyalty Layer for Web3",
+  description:
+    "Swap loyalty rewards across 240+ brands instantly. Oryon turns brand points into liquid, on-chain assets.",
+};
 
 export default function Page() {
   return (
     <main className="min-h-screen bg-[#080b10] overflow-x-hidden">
-      <Navbar />
       <Hero />
       <Partnership />
       <Features />
       <Manual />
       <CTA />
-      <Footer />
     </main>
   );
 }

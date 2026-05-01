@@ -1,27 +1,4 @@
-import { Globe, Layers, Lock, Zap } from "lucide-react";
-
-const features = [
-  {
-    icon: Zap,
-    title: "Sub-second swaps",
-    desc: "Settle real-time conversions in under 400ms with predictable, near-zero fees.",
-  },
-  {
-    icon: Globe,
-    title: "Universal liquidity",
-    desc: "Aggregate pools across 240+ loyalty programs — and route best price automatically.",
-  },
-  {
-    icon: Lock,
-    title: "Non-custodial",
-    desc: "Your keys, your points. Audited contracts secured by formal verification.",
-  },
-  {
-    icon: Layers,
-    title: "Composable rewards",
-    desc: "Stake, lend, or wrap loyalty assets into yield-bearing primitives.",
-  },
-];
+import { FEATURES } from "../lib/data";
 
 const Features = () => (
   <section className="py-[120px] px-20 bg-[#080b10]">
@@ -38,7 +15,7 @@ const Features = () => (
     </h2>
 
     <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-      {features.map((f) => (
+      {FEATURES.map((f) => (
         <div
           key={f.title}
           className="group relative bg-[#0d1117] border border-[#1e2a3a] rounded-xl p-7 overflow-hidden transition-all duration-300 hover:-translate-y-[3px] hover:border-[oklch(0.60_0.22_250_/_0.35)] hover:shadow-[0_12px_40px_#00000066,0_0_0_1px_oklch(0.60_0.22_250_/_0.1)]"

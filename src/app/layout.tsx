@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Space_Grotesk, Space_Mono } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import Navbar from "@/components/shared/Navbar";
+import Footer from "@/components/shared/Footer";
+import AppProviders from "@/providers/app-providers";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -30,15 +33,19 @@ export default function RootLayout({
       style={{ fontFamily: "var(--font-sans, 'Space Grotesk', sans-serif)" }}
     >
       <body className="min-h-screen flex flex-col font-[family-name:var(--font-sans)]">
-        {/* Scan-line ambient effect */}
-        <div
-          className="fixed inset-x-0 top-0 h-0.5 pointer-events-none z-[999] animate-scanline"
-          style={{
-            background:
-              "linear-gradient(to right, transparent, oklch(0.60 0.22 250 / 0.15), transparent)",
-          }}
-        />
-        {children}
+        <AppProviders>
+          {/* Scan-line ambient effect */}
+          <Navbar />
+          <div
+            className="fixed inset-x-0 top-0 h-0.5 pointer-events-none z-[999] animate-scanline"
+            style={{
+              background:
+                "linear-gradient(to right, transparent, oklch(0.60 0.22 250 / 0.15), transparent)",
+            }}
+          />
+          {children}
+          <Footer />
+        </AppProviders>
       </body>
     </html>
   );

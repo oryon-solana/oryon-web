@@ -1,20 +1,5 @@
-const steps = [
-  {
-    num: "01",
-    title: "Connect your loyalty wallet",
-    desc: "Link any rewards account — airline miles, hotel points, retail credits — in seconds.",
-  },
-  {
-    num: "02",
-    title: "Tokenize & swap",
-    desc: "Oryon mints your points as SPL tokens and routes swaps through the deepest pools.",
-  },
-  {
-    num: "03",
-    title: "Earn yield or redeem",
-    desc: "Put idle points to work, or cash out at market rate — no lockups, no expiry.",
-  },
-];
+import type { ReactNode } from "react";
+import { STEPS } from "../lib/data";
 
 const Manual = () => (
   <section className="py-[120px] px-20 bg-[#0d1117] border-y border-[#1e2a3a]">
@@ -34,7 +19,7 @@ const Manual = () => (
         </h2>
 
         <div className="flex flex-col gap-8">
-          {steps.map((s) => (
+          {STEPS.map((s) => (
             <div key={s.num} className="flex gap-5 items-start">
               <div
                 className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-[family-name:var(--font-mono)] text-[11px] font-bold"
@@ -135,7 +120,7 @@ function TermLine({
 }: {
   prompt?: boolean;
   cmd?: string;
-  output?: React.ReactNode;
+  output?: ReactNode;
 }) {
   if (prompt) {
     return (
