@@ -1,5 +1,5 @@
-import Navbar from "@/layout/navbar";
-import Footer from "@/layout/footer";
+import Navbar from "@/components/shared/layout/Navbar";
+import Footer from "@/components/shared/layout/Footer";
 import Hero from "@/sections/landing/Hero";
 import Partnership from "@/sections/landing/Partnership";
 import Features from "@/sections/landing/Features";
