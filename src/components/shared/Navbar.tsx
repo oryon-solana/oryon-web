@@ -1,13 +1,19 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useConnect, useDisconnect, usePhantom } from "@phantom/react-sdk";
 import { AddressType } from "@phantom/browser-sdk";
 import { PublicKey } from "@solana/web3.js";
 
-const links = ["Swap", "Merchants"];
+const links = [
+  { label: "Swap", href: "/swap" },
+  { label: "Merchants", href: "/merchants" },
+  { label: "Partnership", href: "/partnership" },
+];
 
 const Navbar = () => {
   const { connect, isConnecting } = useConnect();
@@ -63,9 +69,11 @@ const Navbar = () => {
     }
   };
 
+  const pathname = usePathname();
+
   return (
     <header className="fixed inset-x-0 top-0 z-50 flex h-[60px] items-center justify-between px-12 bg-[#080b10]/85 backdrop-blur-md border-b border-[#1e2a3a]">
-      <a href="#" className="flex items-center gap-2.5 shrink-0">
+      <Link href="/" className="flex items-center gap-2.5 shrink-0">
         <Image
           src="/logo-color.svg"
           alt="Oryon"
@@ -74,17 +82,19 @@ const Navbar = () => {
           className="h-7 w-auto"
           priority
         />
-      </a>
+      </Link>
 
       <ul className="hidden md:flex items-center gap-8 list-none">
-        {links.map((l) => (
-          <li key={l}>
-            <a
-              href="#"
-              className="text-[13.5px] font-medium text-[#7a90a8] hover:text-[#e8f0f8] transition-colors tracking-wide"
+        {links.map(({ label, href }) => (
+          <li key={href}>
+            <Link
+              href={href}
+              className={`text-[13.5px] font-medium transition-colors tracking-wide ${
+                pathname === href ? "text-[#e8f0f8]" : "text-[#7a90a8] hover:text-[#e8f0f8]"
+              }`}
             >
-              {l}
-            </a>
+              {label}
+            </Link>
           </li>
         ))}
       </ul>
