@@ -1,8 +1,11 @@
-import { MERCHANTS } from "../lib/data";
+"use client";
+
+import { useMerchants } from "../hooks/useMerchants";
 
 export default function MerchantsHero() {
-  const live = MERCHANTS.filter((m) => m.active).length;
-  const soon = MERCHANTS.filter((m) => !m.active).length;
+  const { merchants, loading } = useMerchants();
+  const live = merchants.filter((m) => m.active).length;
+  const soon = merchants.filter((m) => !m.active).length;
 
   return (
     <div className="max-w-[1100px] mx-auto px-8 pt-16 pb-12 relative z-[1]">
@@ -18,7 +21,7 @@ export default function MerchantsHero() {
           className="w-1.5 h-1.5 rounded-full animate-pulse"
           style={{ background: "oklch(0.70 0.20 250)", boxShadow: "0 0 8px oklch(0.70 0.20 250)" }}
         />
-        {live} Active · {soon} Coming Soon
+        {loading ? "Loading…" : `${live} Active · ${soon} Coming Soon`}
       </div>
 
       <h1 className="text-[clamp(36px,4.5vw,44px)] font-bold text-[#e8f0f8] tracking-tight leading-[1.1] mb-3">

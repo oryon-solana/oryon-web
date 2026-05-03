@@ -1,3 +1,19 @@
+export interface MerchantState {
+  pubkey: string;
+  platform: string;
+  authority: string;
+  name: string;
+  pointsMint: string;
+  earnRate: bigint;
+  pointValueIdr: bigint;
+  isActive: boolean;
+  totalPointsIssued: bigint;
+  totalPointsRedeemed: bigint;
+  merchantId: number;
+  bump: number;
+  mintBump: number;
+}
+
 export interface PartnershipFormData {
   name: string;
   earnRate: string;

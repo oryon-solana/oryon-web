@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
-import MerchantsHero from "@/features/merchants/sections/MerchantsHero";
-import MerchantsGrid from "@/features/merchants/sections/MerchantsGrid";
+import MerchantsSection from "@/features/merchants/sections/MerchantsSection";
 import MerchantsCTA from "@/features/merchants/sections/MerchantsCTA";
 
 export const metadata: Metadata = {
   title: "Merchants — Oryon",
-  description: "Explore 240+ supported merchants. Convert, stake, and earn loyalty points across every program in the Oryon network.",
+  description: "Explore supported merchants on-chain. Convert, stake, and earn loyalty points across every program in the Oryon network.",
 };
 
 export default function MerchantsPage() {
@@ -19,8 +18,7 @@ export default function MerchantsPage() {
           backgroundSize: "60px 60px",
         }}
       />
-      <MerchantsHero />
-      <MerchantsGrid />
+      <MerchantsSection />
       <MerchantsCTA />
     </main>
   );

@@ -8,6 +8,47 @@ interface Props {
   delay?: number;
 }
 
+function initials(name: string): string {
+  return name
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((w) => w[0]?.toUpperCase() ?? "")
+    .join("");
+}
+
+const PALETTE = [
+  "#1a3a6b", "#1a4a3b", "#4a1a1a", "#3b1a4a",
+  "#1a3a4a", "#4a3b1a", "#1a4a4a", "#4a1a3b",
+];
+
+function avatarColor(name: string): string {
+  let h = 0;
+  for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) >>> 0;
+  return PALETTE[h % PALETTE.length];
+}
+
+function MerchantAvatar({ name, size = 52 }: { name: string; size?: number }) {
+  const label = initials(name);
+  const bg = avatarColor(name);
+  const r = Math.round(size * 0.25);
+  return (
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} fill="none">
+      <rect width={size} height={size} rx={r} fill={bg} />
+      <text
+        x={size / 2}
+        y={size * 0.67}
+        textAnchor="middle"
+        fontSize={size * 0.36}
+        fontWeight="700"
+        fill="white"
+        fontFamily="Arial, sans-serif"
+      >
+        {label}
+      </text>
+    </svg>
+  );
+}
+
 export default function MerchantCard({ m, delay = 0 }: Props) {
   const [hov, setHov] = useState(false);
 
@@ -52,18 +93,20 @@ export default function MerchantCard({ m, delay = 0 }: Props) {
         )}
       </div>
 
-      {/* Logo */}
+      {/* Avatar */}
       <div
         className="rounded-2xl shrink-0 transition-[box-shadow] duration-[220ms]"
         style={{ boxShadow: hov ? "0 0 24px oklch(0.60 0.22 250 / 0.15)" : "0 4px 16px rgba(0,0,0,0.3)" }}
       >
-        {m.logo(52)}
+        <MerchantAvatar name={m.name} size={52} />
       </div>
 
       {/* Name */}
       <div className="text-center">
         <div className="text-[15px] font-bold text-[#e8f0f8] mb-0.5">{m.name}</div>
-        <div className="text-[11px] text-[#5a7090] font-[family-name:var(--font-mono)] tracking-[0.04em]">{m.cat}</div>
+        <div className="text-[11px] text-[#5a7090] font-[family-name:var(--font-mono)] tracking-[0.04em]">
+          ID #{m.merchantId}
+        </div>
       </div>
 
       {/* Stats */}
@@ -73,15 +116,13 @@ export default function MerchantCard({ m, delay = 0 }: Props) {
       >
         <div>
           <div className="text-[10px] text-[#5a7090] font-[family-name:var(--font-mono)] uppercase tracking-[0.06em] mb-0.5">Earn Rate</div>
-          <div className="text-[15px] font-bold font-[family-name:var(--font-mono)]" style={{ color: "oklch(0.70 0.20 250)" }}>{m.earnRate}x</div>
+          <div className="text-[15px] font-bold font-[family-name:var(--font-mono)]" style={{ color: "oklch(0.70 0.20 250)" }}>{m.earnRate.toFixed(2)}x</div>
         </div>
         <div className="border-l border-[#1e2a3a] pl-3">
           <div className="text-[10px] text-[#5a7090] font-[family-name:var(--font-mono)] uppercase tracking-[0.06em] mb-0.5">Pt Value</div>
-          <div className="text-[15px] font-bold font-[family-name:var(--font-mono)] text-[#e8f0f8]">Rp{m.pointValueIDR}</div>
+          <div className="text-[15px] font-bold font-[family-name:var(--font-mono)] text-[#e8f0f8]">Rp{m.pointValueIDR.toLocaleString()}</div>
         </div>
       </div>
-
-      <div className="text-[11px] text-[#5a7090] font-[family-name:var(--font-mono)] tracking-[0.04em]">{m.unit}</div>
     </div>
   );
 }

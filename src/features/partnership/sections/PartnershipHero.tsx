@@ -13,7 +13,12 @@ const benefits = [
   ],
 ];
 
-export default function PartnershipHero() {
+interface Props {
+  merchantCount?: number;
+  loadingCount?: boolean;
+}
+
+export default function PartnershipHero({ merchantCount, loadingCount }: Props) {
   return (
     <div className="animate-slide-up">
       <div
@@ -87,7 +92,7 @@ export default function PartnershipHero() {
           className="text-[28px] font-bold font-[family-name:var(--font-mono)] leading-none"
           style={{ color: "oklch(0.70 0.20 250)" }}
         >
-          240+
+          {loadingCount ? "—" : `${merchantCount ?? 0}+`}
         </div>
         <div>
           <div className="text-[13px] font-semibold text-[#e8f0f8]">

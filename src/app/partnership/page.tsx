@@ -3,7 +3,8 @@ import PartnershipSection from "@/features/partnership/sections/PartnershipSecti
 
 export const metadata: Metadata = {
   title: "Partnership — Oryon",
-  description: "Join the Oryon network. Add your merchant and let customers earn, swap, and redeem loyalty points on-chain.",
+  description:
+    "Join the Oryon network. Add your merchant and let customers earn, swap, and redeem loyalty points on-chain.",
 };
 
 export default function PartnershipPage() {
@@ -19,7 +20,11 @@ export default function PartnershipPage() {
       />
       <div
         className="fixed left-1/2 -translate-x-1/2 w-[700px] h-[500px] pointer-events-none z-0"
-        style={{ top: "20%", background: "radial-gradient(ellipse, oklch(0.60 0.22 250 / 0.06) 0%, transparent 70%)" }}
+        style={{
+          top: "20%",
+          background:
+            "radial-gradient(ellipse, oklch(0.60 0.22 250 / 0.06) 0%, transparent 70%)",
+        }}
       />
       <PartnershipSection />
     </main>

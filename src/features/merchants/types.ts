@@ -1,12 +1,10 @@
-import type { ReactNode } from "react";
-
 export interface Merchant {
-  id: string;
+  pubkey: string;
   name: string;
-  cat: string;
-  earnRate: number;
+  earnRate: number;        // already in display units (bps / 100), e.g. 1.5
   pointValueIDR: number;
-  unit: string;
   active: boolean;
-  logo: (size?: number) => ReactNode;
+  totalPointsIssued: bigint;
+  totalPointsRedeemed: bigint;
+  merchantId: number;
 }

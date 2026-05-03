@@ -1,28 +1,25 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { CATEGORIES, MERCHANTS } from "../lib/data";
+import { useMerchants } from "../hooks/useMerchants";
 import MerchantCard from "../components/MerchantCard";
-import { cn } from "@/lib/utils";
 
 export default function MerchantsGrid() {
-  const [cat, setCat] = useState("All");
+  const { merchants, loading, error } = useMerchants();
   const [search, setSearch] = useState("");
 
   const filtered = useMemo(
     () =>
-      MERCHANTS.filter(
-        (m) =>
-          (cat === "All" || m.cat === cat) &&
-          m.name.toLowerCase().includes(search.toLowerCase())
+      merchants.filter((m) =>
+        m.name.toLowerCase().includes(search.toLowerCase())
       ),
-    [cat, search]
+    [merchants, search]
   );
 
   return (
     <div className="max-w-[1100px] mx-auto px-8 pb-16 relative z-[1]">
-      {/* Search + Filter bar */}
-      <div className="flex items-center gap-3 mb-9 flex-wrap">
+      {/* Search bar */}
+      <div className="flex items-center gap-3 mb-9">
         <div className="relative flex-none w-[260px]">
           <svg
             className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
@@ -39,36 +36,35 @@ export default function MerchantsGrid() {
           />
         </div>
 
-        <div className="flex gap-1.5 flex-wrap">
-          {CATEGORIES.map((c) => (
-            <button
-              key={c}
-              onClick={() => setCat(c)}
-              className={cn(
-                "px-4 py-2 rounded-full text-[12px] font-semibold transition-all cursor-pointer",
-                cat === c ? "text-white" : "text-[#7a90a8] hover:text-[#e8f0f8]"
-              )}
-              style={
-                cat === c
-                  ? { background: "oklch(0.60 0.22 250)", border: "1px solid transparent", boxShadow: "0 0 16px oklch(0.60 0.22 250 / 0.3)" }
-                  : { background: "#161e2a", border: "1px solid #1e2a3a" }
-              }
-            >
-              {c}
-            </button>
-          ))}
-        </div>
+        {!loading && (
+          <span className="text-[12px] text-[#5a7090] font-[family-name:var(--font-mono)]">
+            {filtered.length} merchant{filtered.length !== 1 ? "s" : ""}
+          </span>
+        )}
       </div>
 
-      {/* Merchant grid */}
-      {filtered.length === 0 ? (
+      {loading && (
+        <div className="text-center py-20 text-[#5a7090] font-[family-name:var(--font-mono)] text-[13px] animate-pulse">
+          Fetching on-chain merchants…
+        </div>
+      )}
+
+      {error && (
+        <div className="text-center py-20 text-[#e05a5a] font-[family-name:var(--font-mono)] text-[13px]">
+          {error}
+        </div>
+      )}
+
+      {!loading && !error && filtered.length === 0 && (
         <div className="text-center py-20 text-[#5a7090] font-[family-name:var(--font-mono)] text-[13px]">
           No merchants found
         </div>
-      ) : (
+      )}
+
+      {!loading && !error && filtered.length > 0 && (
         <div className="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4">
           {filtered.map((m, i) => (
-            <MerchantCard key={m.id} m={m} delay={i * 30} />
+            <MerchantCard key={m.pubkey} m={m} delay={i * 30} />
           ))}
         </div>
       )}
