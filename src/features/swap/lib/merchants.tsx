@@ -2,7 +2,8 @@ import { Connection, PublicKey, clusterApiUrl } from "@solana/web3.js";
 import type { Brand } from "../types";
 
 const PROGRAM_ID = new PublicKey(
-  "EsmVw26H7pZwxcRAULpUj3mqR3V6WDScuYvp4SApG5nr",
+  process.env.NEXT_PUBLIC_PROGRAM_ID ??
+    "39Vs9sUx7gUY29PQtbKewaXaHQQnEHhqxyZ8kc7hoJQw",
 );
 
 type MerchantState = {
@@ -46,13 +47,22 @@ function readBool(data: Buffer, offset: number): ReadResult<boolean> {
 
 function readString(data: Buffer, offset: number): ReadResult<string> {
   const { value: len, offset: nextOffset } = readU32(data, offset);
+  if (len > 256 || nextOffset + len > data.length) return { value: "", offset: nextOffset };
   const end = nextOffset + len;
   const value = textDecoder.decode(data.subarray(nextOffset, end));
   return { value, offset: end };
 }
 
+// sha256("account:MerchantState")[0..8] — precomputed Anchor discriminator
+const MERCHANT_STATE_DISCRIMINATOR = Buffer.from([
+  0x7a, 0x7b, 0x72, 0x84, 0xe8, 0xc9, 0xe9, 0xc7,
+]);
+
 function decodeMerchantState(data: Buffer): MerchantState | null {
-  if (data.length < 8 + 32 + 32 + 4 + 32) return null;
+  // MerchantState minimum size: 8 disc + 32 + 32 + 36 + 32 + 8 + 8 + 1 + 8 + 8 + 4 + 1 + 1
+  if (data.length < 179) return null;
+  // Reject accounts whose discriminator doesn't match MerchantState
+  if (!data.subarray(0, 8).equals(MERCHANT_STATE_DISCRIMINATOR)) return null;
   let offset = 8; // Skip Anchor discriminator.
 
   const platformRes = readPubkey(data, offset);
@@ -144,7 +154,7 @@ function createBrandLogo(name: string, color: string) {
 export async function fetchMerchants(): Promise<Brand[]> {
   const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
   const accounts = await connection.getProgramAccounts(PROGRAM_ID);
-
+  console.log("error fetch account 0 ");
   return accounts
     .map((account) => decodeMerchantState(account.account.data))
     .filter((merchant): merchant is MerchantState => !!merchant)
@@ -156,6 +166,7 @@ export async function fetchMerchants(): Promise<Brand[]> {
       const balance = safeNumber(
         merchant.totalPointsIssued - merchant.totalPointsRedeemed,
       );
+      console.log("error fetch account 1 ");
 
       return {
         id,
@@ -164,6 +175,8 @@ export async function fetchMerchants(): Promise<Brand[]> {
         color,
         pointsMint: merchant.pointsMint,
         balance,
+        earnRate: safeNumber(merchant.earnRate),
+        pointValueIdr: safeNumber(merchant.pointValueIdr),
         logo: createBrandLogo(merchant.name, color),
       } satisfies Brand;
     });

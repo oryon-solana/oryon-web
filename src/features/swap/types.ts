@@ -7,6 +7,8 @@ export type Brand = {
   color: string;
   pointsMint: string;
   balance: number;
+  earnRate: number;      // IDR spend per 1 point earned
+  pointValueIdr: number; // IDR value when redeeming 1 point
   logo: (s?: number) => React.ReactNode;
 };
 

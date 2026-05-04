@@ -71,7 +71,10 @@ export function useWalletBalances(
         if (alive) setBalances(next);
       } catch (err) {
         if (!alive) return;
-        setError(err instanceof Error ? err.message : "Failed to load balances");
+        console.log("error 3", err);
+        setError(
+          err instanceof Error ? err.message : "Failed to load balances",
+        );
       } finally {
         if (alive) setIsLoading(false);
       }

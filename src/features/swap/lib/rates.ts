@@ -1,23 +1,20 @@
-import { FEE } from "./theme";
+import type { Brand } from "../types";
 
-const RATES: Record<string, number> = {
-  "mcdonalds-starbucks": 0.66,
-  "mcdonalds-kfc": 0.9,
-  "starbucks-mcdonalds": 1.5,
-  "starbucks-kfc": 1.4,
-  "kfc-mcdonalds": 1.12,
-  "kfc-starbucks": 0.7,
-};
+const FEE_BPS = 100; // 1%
 
-export function getRate(a: string, b: string): number {
-  const forward = RATES[`${a}-${b}`];
-  if (forward !== undefined) return forward;
-  const inverse = RATES[`${b}-${a}`];
-  return inverse ? +(1 / inverse).toFixed(4) : 0.75;
+// 1 fromPoint = pointValueIdr IDR → earnRate IDR buys 1 toPoint
+// rate = fromBrand.pointValueIdr / toBrand.earnRate
+export function getRate(from: Brand, to: Brand): number {
+  if (!from.pointValueIdr || !to.earnRate) return 0;
+  return Number((from.pointValueIdr / to.earnRate).toFixed(4));
 }
 
-export function calcConversion(numAmt: number, rate: number) {
-  const fee = Math.round(numAmt * FEE);
-  const toAmt = Math.round((numAmt - fee) * rate);
+export function calcConversion(
+  amount: number,
+  rate: number,
+): { fee: number; toAmt: number } {
+  const gross = amount * rate;
+  const fee = Math.ceil(gross * (FEE_BPS / 10000));
+  const toAmt = Math.floor(gross - fee);
   return { fee, toAmt };
 }

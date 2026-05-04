@@ -24,16 +24,21 @@ export function useMerchants() {
             totalPointsIssued: m.totalPointsIssued,
             totalPointsRedeemed: m.totalPointsRedeemed,
             merchantId: m.merchantId,
-          }))
+          })),
         );
         setLoading(false);
       })
       .catch((err) => {
         if (cancelled) return;
-        setError(err instanceof Error ? err.message : "Failed to load merchants");
+        console.log("error 2");
+        setError(
+          err instanceof Error ? err.message : "Failed to load merchants",
+        );
         setLoading(false);
       });
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   return { merchants, loading, error };

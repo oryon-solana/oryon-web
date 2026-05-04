@@ -58,7 +58,7 @@ export function useSwap() {
     () => getBrand(brands, toId) ?? brands[1] ?? brands[0],
     [brands, toId],
   );
-  const rate = fromId && toId ? getRate(fromId, toId) : 0;
+  const rate = fromBrand && toBrand ? getRate(fromBrand, toBrand) : 0;
   const numAmt = parseFloat(fromAmt) || 0;
   const { fee, toAmt } = calcConversion(numAmt, rate);
   const hasAmt = numAmt > 0;

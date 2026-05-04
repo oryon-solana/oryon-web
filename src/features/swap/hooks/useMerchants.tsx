@@ -4,13 +4,7 @@ import { useEffect, useState } from "react";
 import type { Brand } from "../types";
 import { fetchMerchants } from "../lib/merchants";
 
-type State = {
-  brands: Brand[];
-  isLoading: boolean;
-  error: string | null;
-};
-
-export function useMerchants(): State {
+export function useMerchants() {
   const [brands, setBrands] = useState<Brand[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -26,6 +20,7 @@ export function useMerchants(): State {
       })
       .catch((err) => {
         if (!alive) return;
+        console.log("error 1", err);
         setError(
           err instanceof Error ? err.message : "Failed to load merchants",
         );
