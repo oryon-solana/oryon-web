@@ -127,7 +127,7 @@ export function useSwap() {
     if (!fromBrand || !toBrand || !walletAddress) return;
     setModalStatus("loading");
     try {
-      await convertPoints(solana, walletAddress, fromBrand, toBrand, numAmt);
+      await convertPoints(solana, walletAddress, fromBrand, toBrand, numAmt, toAmt);
       setBalances((prev) => ({
         ...prev,
         [fromId]: (prev[fromId] ?? 0) - numAmt,

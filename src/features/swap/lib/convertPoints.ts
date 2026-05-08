@@ -38,6 +38,7 @@ export async function convertPoints(
   fromBrand: Brand,
   toBrand: Brand,
   amount: number,
+  toAmt: number,
 ): Promise<string> {
   const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
   const user = new PublicKey(userAddress);
@@ -142,7 +143,7 @@ export async function convertPoints(
     signature,
     fromMerchant: fromMerchant.toBase58(),
     toMerchant: toMerchant.toBase58(),
-    amount,
+    points: toAmt,
   };
 
   const webhookTargets = [
