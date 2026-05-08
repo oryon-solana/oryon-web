@@ -157,12 +157,24 @@ export async function convertPoints(
         if (!base) return null;
         const url = `${base}${userAddress}`;
         console.log(`Webhook [${label}] → ${url}`);
+
         return fetch(url, {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
+          method: "OPTIONS",
+          headers: { Origin: window.location.origin },
         })
-          .then((res) => console.log(`Webhook [${label}] sent → ${res.status}`))
+          .then((res) => {
+            console.log(`Webhook [${label}] OPTIONS → ${res.status}`);
+            const allowed = res.ok || res.status === 204;
+            if (!allowed) {
+              console.warn(`Webhook [${label}] blocked by CORS (${res.status}), skipping`);
+              return;
+            }
+            return fetch(url, {
+              method: "PATCH",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
+            }).then((r) => console.log(`Webhook [${label}] sent → ${r.status}`));
+          })
           .catch((err) => console.error(`Webhook [${label}] failed:`, err));
       })
       .filter(Boolean) as Promise<void>[],
