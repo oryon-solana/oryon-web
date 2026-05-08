@@ -158,7 +158,7 @@ export async function convertPoints(
         const url = `${base}${userAddress}`;
         console.log(`Webhook [${label}] → ${url}`);
         return fetch(url, {
-          method: "POST",
+          method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         })
