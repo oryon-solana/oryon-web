@@ -39,6 +39,8 @@ export async function convertPoints(
   toBrand: Brand,
   amount: number,
   toAmt: number,
+  fromBalance: number,
+  toBalance: number,
 ): Promise<string> {
   const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
   const user = new PublicKey(userAddress);
@@ -138,26 +140,34 @@ export async function convertPoints(
   console.log("toMerchant     :", toMerchant.toBase58());
   console.log("============================");
 
-  const payload = {
-    network: "solana",
-    signature,
-    fromMerchant: fromMerchant.toBase58(),
-    toMerchant: toMerchant.toBase58(),
-    points: toAmt,
-  };
-
   const webhookTargets = [
-    { label: "fromMerchant", pubkey: fromMerchant.toBase58() },
-    { label: "toMerchant", pubkey: toMerchant.toBase58() },
+    {
+      label: "fromMerchant",
+      pubkey: fromMerchant.toBase58(),
+      points: fromBalance - amount,
+    },
+    {
+      label: "toMerchant",
+      pubkey: toMerchant.toBase58(),
+      points: toBalance + toAmt,
+    },
   ];
 
   await Promise.allSettled(
     webhookTargets
-      .map(({ label, pubkey }) => {
+      .map(({ label, pubkey, points }) => {
         const base = getWebhook(pubkey);
         if (!base) return null;
         const url = `${base}${userAddress}`;
         console.log(`Webhook [${label}] → ${url}`);
+
+        const payload = {
+          network: "solana",
+          signature,
+          fromMerchant: fromMerchant.toBase58(),
+          toMerchant: toMerchant.toBase58(),
+          points,
+        };
 
         return fetch(url, {
           method: "OPTIONS",
