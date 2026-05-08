@@ -47,7 +47,8 @@ function readBool(data: Buffer, offset: number): ReadResult<boolean> {
 
 function readString(data: Buffer, offset: number): ReadResult<string> {
   const { value: len, offset: nextOffset } = readU32(data, offset);
-  if (len > 256 || nextOffset + len > data.length) return { value: "", offset: nextOffset };
+  if (len > 256 || nextOffset + len > data.length)
+    return { value: "", offset: nextOffset };
   const end = nextOffset + len;
   const value = textDecoder.decode(data.subarray(nextOffset, end));
   return { value, offset: end };
@@ -151,28 +152,49 @@ function createBrandLogo(name: string, color: string) {
   );
 }
 
+export async function fetchMerchantState(
+  connection: Connection,
+  merchantPubkey: PublicKey,
+): Promise<MerchantState> {
+  const info = await connection.getAccountInfo(merchantPubkey);
+  if (!info) throw new Error(`Merchant account not found: ${merchantPubkey.toBase58()}`);
+  const state = decodeMerchantState(info.data as Buffer);
+  if (!state) throw new Error(`Failed to decode MerchantState for: ${merchantPubkey.toBase58()}`);
+  return state;
+}
+
 export async function fetchMerchants(): Promise<Brand[]> {
   const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
   const accounts = await connection.getProgramAccounts(PROGRAM_ID);
-  console.log("error fetch account 0 ");
+
   return accounts
-    .map((account) => decodeMerchantState(account.account.data))
-    .filter((merchant): merchant is MerchantState => !!merchant)
-    .filter((merchant) => merchant.isActive)
-    .map((merchant) => {
+    .filter((account) =>
+      account.account.data.subarray(0, 8).equals(MERCHANT_STATE_DISCRIMINATOR),
+    )
+    .map((account) => ({
+      pubkey: account.pubkey.toBase58(),
+      merchant: decodeMerchantState(account.account.data),
+    }))
+    .filter(
+      (item): item is { pubkey: string; merchant: MerchantState } =>
+        !!item.merchant,
+    )
+    .filter(({ merchant }) => merchant.isActive)
+    .map(({ pubkey, merchant }) => {
       const id = `${slugify(merchant.name)}-${merchant.merchantId}`;
       const hue = hashToHue(merchant.pointsMint);
       const color = `hsl(${hue} 70% 55%)`;
       const balance = safeNumber(
         merchant.totalPointsIssued - merchant.totalPointsRedeemed,
       );
-      console.log("error fetch account 1 ");
 
       return {
         id,
         name: merchant.name,
         unit: "Points",
         color,
+        pubkey,
+        authority: merchant.authority,
         pointsMint: merchant.pointsMint,
         balance,
         earnRate: safeNumber(merchant.earnRate),

@@ -5,6 +5,8 @@ export type Brand = {
   name: string;
   unit: string;
   color: string;
+  pubkey: string;        // on-chain PDA address
+  authority: string;     // merchant authority pubkey
   pointsMint: string;
   balance: number;
   earnRate: number;      // IDR spend per 1 point earned

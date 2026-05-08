@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { usePhantom } from "@phantom/react-sdk";
+import { usePhantom, useSolana } from "@phantom/react-sdk";
 import { AddressType } from "@phantom/browser-sdk";
 import { HISTORY_INIT, getBrand } from "../lib/brands";
 import { getRate, calcConversion } from "../lib/rates";
+import { convertPoints } from "../lib/convertPoints";
 import type { HistoryItem, ModalStatus } from "../types";
 import { useMerchants } from "./useMerchants";
 import { useWalletBalances } from "./useWalletBalances";
@@ -12,6 +13,7 @@ import { useWalletBalances } from "./useWalletBalances";
 export function useSwap() {
   const { brands, isLoading, error: merchantsError } = useMerchants();
   const { addresses, isConnected } = usePhantom();
+  const { solana } = useSolana();
   const [fromId, setFromId] = useState("");
   const [toId, setToId] = useState("");
   const [fromAmt, setFromAmt] = useState("");
@@ -24,7 +26,8 @@ export function useSwap() {
 
   const walletAddress = useMemo(() => {
     return (
-      addresses.find((item) => item.addressType === AddressType.solana)?.address ||
+      addresses.find((item) => item.addressType === AddressType.solana)
+        ?.address ||
       addresses[0]?.address ||
       ""
     );
@@ -60,7 +63,10 @@ export function useSwap() {
   );
   const rate = fromBrand && toBrand ? getRate(fromBrand, toBrand) : 0;
   const numAmt = parseFloat(fromAmt) || 0;
-  const { fee, toAmt } = calcConversion(numAmt, rate);
+  const { fee, toAmt } =
+    fromBrand && toBrand
+      ? calcConversion(numAmt, fromBrand, toBrand)
+      : { fee: 0, toAmt: 0 };
   const hasAmt = numAmt > 0;
   const canConvert =
     !!fromBrand &&
@@ -114,10 +120,11 @@ export function useSwap() {
     setModalStatus("idle");
   }
 
-  function confirm() {
-    if (!fromBrand || !toBrand) return;
+  async function confirm() {
+    if (!fromBrand || !toBrand || !walletAddress) return;
     setModalStatus("loading");
-    setTimeout(() => {
+    try {
+      await convertPoints(solana, walletAddress, fromBrand, toBrand, numAmt);
       setBalances((prev) => ({
         ...prev,
         [fromId]: (prev[fromId] ?? 0) - numAmt,
@@ -136,7 +143,11 @@ export function useSwap() {
       ]);
       setFromAmt("");
       setModalStatus("success");
-    }, 1800);
+    } catch (err) {
+      setModalStatus("idle");
+      console.log("error swap", err);
+      setError(err instanceof Error ? err.message : "Transaction failed");
+    }
   }
 
   return {
