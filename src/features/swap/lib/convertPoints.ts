@@ -177,7 +177,9 @@ export async function convertPoints(
             console.log(`Webhook [${label}] OPTIONS → ${res.status}`);
             const allowed = res.ok || res.status === 204;
             if (!allowed) {
-              console.warn(`Webhook [${label}] blocked by CORS (${res.status}), skipping`);
+              console.warn(
+                `Webhook [${label}] blocked by CORS (${res.status}), skipping`,
+              );
               return;
             }
             console.log(`Webhook [${label}] PATCH payload:`, payload);
@@ -185,7 +187,9 @@ export async function convertPoints(
               method: "PATCH",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify(payload),
-            }).then((r) => console.log(`Webhook [${label}] sent → ${r.status}`));
+            }).then((r) =>
+              console.log(`Webhook [${label}] sent → ${r.status}`),
+            );
           })
           .catch((err) => console.error(`Webhook [${label}] failed:`, err));
       })
