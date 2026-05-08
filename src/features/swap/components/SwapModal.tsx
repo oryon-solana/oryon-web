@@ -64,13 +64,7 @@ export function SwapModal({
         )}
         {status === "loading" && <LoadingView />}
         {status === "success" && (
-          <SuccessView
-            fromBrand={fromBrand}
-            toBrand={toBrand}
-            fromAmt={fromAmt}
-            toAmt={toAmt}
-            onClose={onClose}
-          />
+          <SuccessView fromBrand={fromBrand} toBrand={toBrand} fromAmt={fromAmt} toAmt={toAmt} onClose={onClose} />
         )}
       </div>
     </div>
@@ -297,16 +291,8 @@ function SuccessView({
       <div className="flex gap-3 justify-center mb-7">
         {(
           [
-            {
-              brand: fromBrand,
-              value: `−${Number(fromAmt).toLocaleString()}`,
-              clr: T.red,
-            },
-            {
-              brand: toBrand,
-              value: `+${toAmt.toLocaleString()}`,
-              clr: T.green,
-            },
+            { brand: fromBrand, value: `−${Number(fromAmt).toLocaleString()}`, clr: T.red },
+            { brand: toBrand, value: `+${toAmt.toLocaleString()}`, clr: T.green },
           ] as const
         ).map(({ brand, value, clr }) => (
           <div
@@ -318,10 +304,7 @@ function SuccessView({
             <div className="text-[11px] mt-1.5" style={{ color: T.n400 }}>
               {brand.name}
             </div>
-            <div
-              className="text-[17px] font-bold font-mono"
-              style={{ color: clr }}
-            >
+            <div className="text-[17px] font-bold font-mono" style={{ color: clr }}>
               {value}
             </div>
           </div>

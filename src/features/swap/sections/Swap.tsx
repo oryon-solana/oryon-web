@@ -3,7 +3,6 @@
 import { useSwap } from "../hooks/useSwap";
 import { SwapCard } from "../components/SwapCard";
 import { SwapModal } from "../components/SwapModal";
-import { BalancePreview } from "../components/BalancePreview";
 import { T } from "../lib/theme";
 
 export default function Swap() {
@@ -19,17 +18,41 @@ export default function Swap() {
           >
             <div className="flex flex-col gap-4">
               <div className="rounded-2xl p-5" style={{ background: T.n800 }}>
-                <div className="h-3 w-16 rounded mb-4" style={{ background: T.n700 }} />
-                <div className="h-10 rounded-xl" style={{ background: T.n700 }} />
-                <div className="h-14 rounded-xl mt-3" style={{ background: T.n700 }} />
+                <div
+                  className="h-3 w-16 rounded mb-4"
+                  style={{ background: T.n700 }}
+                />
+                <div
+                  className="h-10 rounded-xl"
+                  style={{ background: T.n700 }}
+                />
+                <div
+                  className="h-14 rounded-xl mt-3"
+                  style={{ background: T.n700 }}
+                />
               </div>
-              <div className="h-10 w-10 rounded-full self-center" style={{ background: T.n800 }} />
+              <div
+                className="h-10 w-10 rounded-full self-center"
+                style={{ background: T.n800 }}
+              />
               <div className="rounded-2xl p-5" style={{ background: T.n800 }}>
-                <div className="h-3 w-16 rounded mb-4" style={{ background: T.n700 }} />
-                <div className="h-10 rounded-xl" style={{ background: T.n700 }} />
-                <div className="h-14 rounded-xl mt-3" style={{ background: T.n700 }} />
+                <div
+                  className="h-3 w-16 rounded mb-4"
+                  style={{ background: T.n700 }}
+                />
+                <div
+                  className="h-10 rounded-xl"
+                  style={{ background: T.n700 }}
+                />
+                <div
+                  className="h-14 rounded-xl mt-3"
+                  style={{ background: T.n700 }}
+                />
               </div>
-              <div className="h-14 rounded-[14px]" style={{ background: T.n800 }} />
+              <div
+                className="h-14 rounded-[14px]"
+                style={{ background: T.n800 }}
+              />
             </div>
           </div>
         )}
@@ -61,15 +84,6 @@ export default function Swap() {
 
         {s.isReady && (
           <>
-            {s.hasAmt && !s.error && (
-              <BalancePreview
-                fromBrand={s.fromBrand}
-                toBrand={s.toBrand}
-                balances={s.balances}
-                numAmt={s.numAmt}
-                toAmt={s.toAmt}
-              />
-            )}
             <SwapCard
               brands={s.brands}
               fromId={s.fromId}
@@ -96,8 +110,14 @@ export default function Swap() {
               status={s.modalStatus}
               fromBrand={s.fromBrand}
               toBrand={s.toBrand}
-              fromAmt={s.fromAmt}
-              toAmt={s.toAmt}
+              fromAmt={
+                s.modalStatus === "success"
+                  ? String(s.successSnapshot.fromAmt)
+                  : s.fromAmt
+              }
+              toAmt={
+                s.modalStatus === "success" ? s.successSnapshot.toAmt : s.toAmt
+              }
               rate={s.rate}
               fee={s.fee}
               onClose={s.closeModal}

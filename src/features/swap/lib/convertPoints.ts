@@ -13,6 +13,7 @@ import {
 import type { ISolanaChain } from "@phantom/chain-interfaces";
 import type { Brand } from "../types";
 import { fetchMerchantState } from "./merchants";
+import { getWebhook } from "./webhooks";
 
 const PROGRAM_ID = new PublicKey(
   process.env.NEXT_PUBLIC_PROGRAM_ID ??
@@ -128,6 +129,43 @@ export async function convertPoints(
   await connection.confirmTransaction(
     { signature, blockhash, lastValidBlockHeight },
     "confirmed",
+  );
+
+  console.log("=== convertPoints SUCCESS ===");
+  console.log("signature      :", signature);
+  console.log("fromMerchant   :", fromMerchant.toBase58());
+  console.log("toMerchant     :", toMerchant.toBase58());
+  console.log("============================");
+
+  const payload = {
+    network: "solana",
+    signature,
+    fromMerchant: fromMerchant.toBase58(),
+    toMerchant: toMerchant.toBase58(),
+    amount,
+  };
+
+  const webhookTargets = [
+    { label: "fromMerchant", pubkey: fromMerchant.toBase58() },
+    { label: "toMerchant", pubkey: toMerchant.toBase58() },
+  ];
+
+  await Promise.allSettled(
+    webhookTargets
+      .map(({ label, pubkey }) => {
+        const base = getWebhook(pubkey);
+        if (!base) return null;
+        const url = `${base}${userAddress}`;
+        console.log(`Webhook [${label}] → ${url}`);
+        return fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        })
+          .then((res) => console.log(`Webhook [${label}] sent → ${res.status}`))
+          .catch((err) => console.error(`Webhook [${label}] failed:`, err));
+      })
+      .filter(Boolean) as Promise<void>[],
   );
 
   return signature;

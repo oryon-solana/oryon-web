@@ -23,6 +23,7 @@ export function useSwap() {
   const [balances, setBalances] = useState<Record<string, number>>({});
   const [history, setHistory] = useState<HistoryItem[]>(HISTORY_INIT);
   const [error, setError] = useState("");
+  const [successSnapshot, setSuccessSnapshot] = useState({ fromAmt: 0, toAmt: 0 });
 
   const walletAddress = useMemo(() => {
     return (
@@ -118,6 +119,8 @@ export function useSwap() {
   function closeModal() {
     setModalOpen(false);
     setModalStatus("idle");
+    setFromAmt("");
+    setError("");
   }
 
   async function confirm() {
@@ -141,7 +144,7 @@ export function useSwap() {
         },
         ...prev,
       ]);
-      setFromAmt("");
+      setSuccessSnapshot({ fromAmt: numAmt, toAmt });
       setModalStatus("success");
     } catch (err) {
       setModalStatus("idle");
@@ -175,6 +178,7 @@ export function useSwap() {
     history,
     modalOpen,
     modalStatus,
+    successSnapshot,
     flip,
     changeFrom,
     changeTo,
