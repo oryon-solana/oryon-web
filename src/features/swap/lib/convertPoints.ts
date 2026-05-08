@@ -169,6 +169,7 @@ export async function convertPoints(
               console.warn(`Webhook [${label}] blocked by CORS (${res.status}), skipping`);
               return;
             }
+            console.log(`Webhook [${label}] PATCH payload:`, payload);
             return fetch(url, {
               method: "PATCH",
               headers: { "Content-Type": "application/json" },
