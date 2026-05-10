@@ -18,7 +18,7 @@ export function useMerchants() {
           data.map((m) => ({
             pubkey: m.pubkey,
             name: m.name,
-            earnRate: Number(m.earnRate) / 100,
+            earnRate: Number(m.earnRate),
             pointValueIDR: Number(m.pointValueIdr),
             active: m.isActive,
             totalPointsIssued: m.totalPointsIssued,

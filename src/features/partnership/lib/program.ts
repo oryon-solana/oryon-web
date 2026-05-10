@@ -150,8 +150,7 @@ export function buildRegisterMerchantIx(
   const [merchant] = findMerchantPDA(authority);
   const [pointsMint] = findMintPDA(authority);
 
-  // earnRate stored as basis points: 1.5 → 150
-  const earnRateBps = BigInt(Math.round(earnRate * 100));
+  const earnRateBps = BigInt(Math.round(earnRate));
   const pointValueBig = BigInt(Math.round(pointValueIDR));
 
   return new TransactionInstruction({
